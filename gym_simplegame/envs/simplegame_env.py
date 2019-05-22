@@ -39,7 +39,7 @@ class SimplegameEnv(discrete.DiscreteEnv):
     metadata = {'render.modes': ['human', 'ansi']}
 
     def __init__(self, grid=4):
-        desc = np.full((grid, grid), X)
+        desc = np.full((grid, grid), 'X')
         res[0][0] = 'S'
         res[-1][-1] = 'G'
         self.desc = desc = np.asarray(desc,dtype='c')
