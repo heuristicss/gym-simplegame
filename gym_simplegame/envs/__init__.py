@@ -1,0 +1,1 @@
+from gym_simplegame.envs.simplegame_env import SimplegameEnv
