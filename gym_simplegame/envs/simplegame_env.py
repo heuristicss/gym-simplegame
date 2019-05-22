@@ -40,8 +40,8 @@ class SimplegameEnv(discrete.DiscreteEnv):
 
     def __init__(self, grid=4):
         desc = np.full((grid, grid), 'X')
-        res[0][0] = 'S'
-        res[-1][-1] = 'G'
+        desc[0][0] = 'S'
+        desc[-1][-1] = 'G'
         self.desc = desc = np.asarray(desc,dtype='c')
         self.nrow, self.ncol = nrow, ncol = desc.shape
         self.reward_range = (0, 1)
