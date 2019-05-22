@@ -97,12 +97,12 @@ class SimplegameEnv(discrete.DiscreteEnv):
                     if letter in b'GH':
                         li.append((1.0, s, 0, True))
                     else:
-						newrow, newcol = inc(row, col, a)
-						newstate = to_s(newrow, newcol)
-						newletter = desc[newrow, newcol]
-						done = bytes(newletter) in b'GH'
-						rew = float(newletter == b'G')*101 - float(row==newrow & col==newcol)*9 - 1.
-						li.append((1.0, newstate, rew, done))
+			newrow, newcol = inc(row, col, a)
+			newstate = to_s(newrow, newcol)
+			newletter = desc[newrow, newcol]
+			done = bytes(newletter) in b'GH'
+			rew = float(newletter == b'G')*101 - float(row==newrow & col==newcol)*9 - 1.
+			li.append((1.0, newstate, rew, done))
 
         super(SimplegameEnv, self).__init__(nS, nA, P, isd)
 
