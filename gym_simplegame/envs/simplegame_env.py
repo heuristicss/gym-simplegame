@@ -14,24 +14,24 @@ UP = 3
 
 MAPS = {
     2: [
-        "SF",
-        "FH"
+        "SX",
+        "XG"
     ],
     4: [
-        "SFFF",
-        "FHFH",
-        "FFFH",
-        "HFFG"
+        "SXXX",
+        "XXXX",
+        "XXXX",
+        "XXXG"
     ],
     8: [
-        "SFFFFFFF",
-        "FFFFFFFF",
-        "FFFHFFFF",
-        "FFFFFHFF",
-        "FFFHFFFF",
-        "FHHFFFHF",
-        "FHFFHFHF",
-        "FFFHFFFG"
+        "SXXXXXXX",
+        "XXXXXXXX",
+        "XXXXXXXX",
+        "XXXXXXXX",
+        "XXXXXXXX",
+        "XXXXXXXX",
+        "XXXXXXXX",
+        "XXXXXXXG"
     ],
 }
 
