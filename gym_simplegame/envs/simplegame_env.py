@@ -12,28 +12,6 @@ DOWN = 1
 RIGHT = 2
 UP = 3
 
-MAPS = {
-    2: [
-        "SX",
-        "XG"
-    ],
-    4: [
-        "SXXX",
-        "XXXX",
-        "XXXX",
-        "XXXG"
-    ],
-    8: [
-        "SXXXXXXX",
-        "XXXXXXXX",
-        "XXXXXXXX",
-        "XXXXXXXX",
-        "XXXXXXXX",
-        "XXXXXXXX",
-        "XXXXXXXX",
-        "XXXXXXXG"
-    ],
-}
 
 
 class SimplegameEnv(discrete.DiscreteEnv):
@@ -61,7 +39,9 @@ class SimplegameEnv(discrete.DiscreteEnv):
     metadata = {'render.modes': ['human', 'ansi']}
 
     def __init__(self, grid=4):
-        desc = MAPS[grid]
+        desc = np.full((grid, grid), X)
+        res[0][0] = 'S'
+        res[-1][-1] = 'G'
         self.desc = desc = np.asarray(desc,dtype='c')
         self.nrow, self.ncol = nrow, ncol = desc.shape
         self.reward_range = (0, 1)
