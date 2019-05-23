@@ -81,7 +81,7 @@ class SimplegameEnv(discrete.DiscreteEnv):
                         newstate = to_s(newrow, newcol)
                         newletter = desc[newrow, newcol]
                         done = bytes(newletter) in b'GH'
-                        rew = float(newletter == b'G')*101 - float(row==newrow & col==newcol)*9 - 1.
+                        rew = float(newletter == b'G')*101 - float(row==newrow and col==newcol)*9 - 1.
                         li.append((1.0, newstate, rew, done))
 
         super(SimplegameEnv, self).__init__(nS, nA, P, isd)
