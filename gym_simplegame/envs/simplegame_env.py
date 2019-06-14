@@ -16,41 +16,42 @@ UP = 3
 
 class SimplegameEnv(discrete.DiscreteEnv):
     """
-    Winter is here. You and your friends were tossing around a frisbee at the park
-    when you made a wild throw that left the frisbee out in the middle of the lake.
-    The water is mostly frozen, but there are a few holes where the ice has melted.
-    If you step into one of those holes, you'll fall into the freezing water.
-    At this time, there's an international frisbee shortage, so it's absolutely imperative that
-    you navigate across the lake and retrieve the disc.
-    However, the ice is slippery, so you won't always move in the direction you intend.
-    The surface is described using a grid like the following
-        SFFF
-        FHFH
-        FFFH
-        HFFG
-    S : starting point, safe
-    F : frozen surface, safe
-    H : hole, fall to your doom
-    G : goal, where the frisbee is located
-    The episode ends when you reach the goal or fall in a hole.
-    You receive a reward of 1 if you reach the goal, and zero otherwise.
+    walls variable is an array of multiple wall objects
+    wall format: [[position of wall], 0 for bottom or 1 for right]
+    example: walls = [[[1,1],0],[[1,1],1]] # put a wall to the right and bottom
+    of position [1,1]
     """
 
     metadata = {'render.modes': ['human', 'ansi']}
 
-    def __init__(self, grid=4):
-        desc = np.full((grid, grid), 'X')
-        desc[0][0] = 'S'
-        desc[-1][-1] = 'G'
+    def __init__(self, nrow=4, ncol=4, walls=[]):
+        desc = np.full((2*nrow+1, 2*ncol+1), ' ')
+        
+        for i in range(nrow):
+          desc[2*i+1][0] = '|'
+          desc[2*i+1][-1] = '|'
+        for j in range(ncol):
+          desc[0][2*j+1] = '-'
+          desc[-1][2*j+1] = '-'
+        for i in range(nrow+1):
+          for j in range(ncol+1):
+            desc[2*i][2*j] = '+'
+        for wall in walls:
+          if wall[1] == 0:
+            desc[2*wall[0][0]+2][2*wall[0][1]+1] = '-'
+          else:
+            desc[2*wall[0][0]+1][2*wall[0][1]+2] = '|'
+            
+            
         self.desc = desc = np.asarray(desc,dtype='c')
-        self.nrow, self.ncol = nrow, ncol = desc.shape
+        self.nrow, self.ncol = nrow, ncol
         self.reward_range = (0, 1)
 
         nA = 4
         nS = nrow * ncol
-
-        isd = np.array(desc == b'S').astype('float64').ravel()
-        isd /= isd.sum()
+                        
+        isd = np.full(nS,0.)
+        isd[0] = 1.
 
         P = {s : {a : [] for a in range(nA)} for s in range(nS)}
 
@@ -59,13 +60,17 @@ class SimplegameEnv(discrete.DiscreteEnv):
 
         def inc(row, col, a):
             if a == LEFT:
-                col = max(col-1,0)
+              if desc[2*row+1][2*col] == b' ':
+                col = col-1
             elif a == DOWN:
-                row = min(row+1,nrow-1)
+              if desc[2*row+2][2*col+1] == b' ':
+                row = row+1
             elif a == RIGHT:
-                col = min(col+1,ncol-1)
+              if desc[2*row+1][2*col+2] == b' ':
+                col = col+1
             elif a == UP:
-                row = max(row-1,0)
+              if desc[2*row][2*col+1] == b' ':
+                row = row-1
             return (row, col)
 
         for row in range(nrow):
@@ -73,26 +78,26 @@ class SimplegameEnv(discrete.DiscreteEnv):
                 s = to_s(row, col)
                 for a in range(4):
                     li = P[s][a]
-                    letter = desc[row, col]
-                    if letter in b'GH':
+                    done = row == nrow-1 and col == ncol-1
+                    if done:
                         li.append((1.0, s, 0, True))
                     else:
                         newrow, newcol = inc(row, col, a)
                         newstate = to_s(newrow, newcol)
-                        newletter = desc[newrow, newcol]
-                        done = bytes(newletter) in b'GH'
-                        rew = float(newletter == b'G')*101 - float(row==newrow and col==newcol)*9 - 1.
+                        done = newrow == nrow-1 and newcol == ncol-1
+                        rew = float(done)*101 - float(row == newrow and col == newcol)*99 - 1.
                         li.append((1.0, newstate, rew, done))
+                                                
 
         super(SimplegameEnv, self).__init__(nS, nA, P, isd)
 
     def render(self, mode='human'):
         outfile = StringIO() if mode == 'ansi' else sys.stdout
-
+                
         row, col = self.s // self.ncol, self.s % self.ncol
         desc = self.desc.tolist()
         desc = [[c.decode('utf-8') for c in line] for line in desc]
-        desc[row][col] = utils.colorize(desc[row][col], "red", highlight=True)
+        desc[2*row+1][2*col+1] = 'X'
         if self.lastaction is not None:
             outfile.write("  ({})\n".format(["Left","Down","Right","Up"][self.lastaction]))
         else:
