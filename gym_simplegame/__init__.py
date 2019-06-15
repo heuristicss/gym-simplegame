@@ -5,18 +5,5 @@ logger = logging.getLogger(__name__)
 
 register(
     id='simplegame-v0',
-    entry_point='gym_simplegame.envs:SimplegameEnv',
-    kwargs={'grid' : 2},
-)
-
-register(
-    id='simplegame4-v0',
-    entry_point='gym_simplegame.envs:SimplegameEnv',
-    kwargs={'grid' : 4},
-)
-
-register(
-    id='simplegame8-v0',
-    entry_point='gym_simplegame.envs:SimplegameEnv',
-    kwargs={'grid' : 8},
+    entry_point='gym_simplegame.envs:SimplegameEnv'
 )
