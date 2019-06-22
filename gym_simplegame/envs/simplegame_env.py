@@ -37,9 +37,9 @@ class SimplegameEnv(discrete.DiscreteEnv):
           for j in range(ncol+1):
             desc[2*i][2*j] = '+'
         for wall in walls:
-          if wall[1] == 0:
+          if wall[1] == 0 and wall[0][0] < nrow - 1 and wall[0][1] < ncol:
             desc[2*wall[0][0]+2][2*wall[0][1]+1] = '-'
-          else:
+          elif wall[0][0] < nrow and wall[0][1] < ncol - 1:
             desc[2*wall[0][0]+1][2*wall[0][1]+2] = '|'
             
             
