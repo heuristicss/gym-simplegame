@@ -85,7 +85,7 @@ class SimplegameEnv(discrete.DiscreteEnv):
                         newrow, newcol = inc(row, col, a)
                         newstate = to_s(newrow, newcol)
                         done = newrow == nrow-1 and newcol == ncol-1
-                        rew = float(done)*100 - float(row == newrow and col == newcol)*10 - 1.
+                        rew = float(done)*100 - float(row == newrow and col == newcol)*1000 - 1.
                         li.append((1.0, newstate, rew, done))
                                                 
 
