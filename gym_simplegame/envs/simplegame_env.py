@@ -24,7 +24,7 @@ class SimplegameEnv(discrete.DiscreteEnv):
 
     metadata = {'render.modes': ['human', 'ansi']}
 
-    def __init__(self, nrow=4, ncol=4, walls=[]):
+    def __init__(self, nrow=4, ncol=4, walls=[],rewards=[1000,-10,-1]):
         desc = np.full((2*nrow+1, 2*ncol+1), ' ')
         
         for i in range(nrow):
@@ -85,7 +85,7 @@ class SimplegameEnv(discrete.DiscreteEnv):
                         newrow, newcol = inc(row, col, a)
                         newstate = to_s(newrow, newcol)
                         done = newrow == nrow-1 and newcol == ncol-1
-                        rew = float(done)*100 - float(row == newrow and col == newcol)*1000 - 1.
+                        rew = float(done*(rewards[0]-rewards[2]) + (row == newrow and col == newcol)*(rewards[1]-rewards[2]) + rewards[2])
                         li.append((1.0, newstate, rew, done))
                                                 
 
