@@ -24,7 +24,7 @@ class SimplegameEnv(discrete.DiscreteEnv):
 
     metadata = {'render.modes': ['human', 'ansi']}
 
-    def __init__(self, nrow=4, ncol=4, walls=[],rewards=[1000,-10,-1]):
+    def __init__(self, nrow=4, ncol=4, walls=[],rewards=[100,-10,-1]):
         desc = np.full((2*nrow+1, 2*ncol+1), ' ')
         
         for i in range(nrow):
